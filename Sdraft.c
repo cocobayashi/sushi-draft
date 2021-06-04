@@ -1,6 +1,9 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
 
+int input(void);
+void output(pack);
+
 int main(void)
 {          
     int Mypack[15];
@@ -16,7 +19,7 @@ int main(void)
     for (i = 0; i < 4; i++) {                           //寿司パックを計４パック作成   神話 2 種類 レア 5 種類 アンコモン 7 種類 コモン 9 種類
         for (j = 0; j < 15; j++) {                      //寿司パック作成ループ
             do {                                    
-                flag = 0;
+                flag = flag & 0x0;
                 if (j == 0) {
                     temp = 0 + rand() % 2;              //神話レアのネタ 2 種類の抽選
                 } else if (j <= 3){
@@ -28,10 +31,10 @@ int main(void)
                 }
                 for (k = 0; k < j; k++) {               
                     if (temp == pack[k][i]) {          //パック内に同じネタが存在する場合 flag = 1(エラー)でやり直し
-                        flag = 1;
+                        flag = flag | 0x1;
                     }
                 }       
-            } while (flag == 1);                        //チェック
+            } while ((flag & 0x1) == 0x1);                        //チェック
 
             pack[j][i] = temp;                             //パックにネタの情報を入れる      
         }
@@ -45,77 +48,8 @@ int main(void)
         for (j = 0; j < 15; j++) {                      //pickするパック内を表示
             if (pack[j][temp] != -1){                   //パック内に存在しないのは表示しない
                 printf("%d ",j + 1);
-                switch (pack[j][temp]) {
-                    case 0:
-                        printf("大トロ");
-                        break;
-                    case 1:
-                        printf("ウニ&いくら");
-                        break;
-                    case 2:
-                        printf("赤エビ");
-                        break;
-                    case 3:
-                        printf("煮穴子");
-                        break;
-                    case 4:
-                        printf("中とろ");
-                        break;
-                    case 5:
-                        printf("寒ブリ");
-                        break;
-                    case 6:
-                        printf("甘鯛");
-                        break;
-                    case 7:
-                        printf("アジ");
-                        break;
-                    case 8:
-                        printf("マグロ");
-                        break;
-                    case 9:
-                        printf("サーモン");
-                        break;
-                    case 10:
-                        printf("いか");
-                        break;
-                    case 11:
-                        printf("タコ");
-                        break;
-                    case 12:
-                        printf("エビ");
-                        break;
-                    case 13:
-                        printf("ホタテ");
-                        break;
-                    case 14:
-                        printf("かっぱ巻き");
-                        break;
-                    case 15:
-                        printf("かんぴょう巻き");
-                        break;
-                    case 16:
-                        printf("いなり");
-                        break;
-                    case 17:
-                        printf("玉子焼き");
-                        break;
-                    case 18:
-                        printf("ナス");
-                        break;
-                    case 19:
-                        printf("納豆巻き");
-                        break;
-                    case 20:
-                        printf("新香巻き");
-                        break;
-                    case 21:
-                        printf("ハンバーグ");
-                        break;
-                    case 22:
-                        printf("コーン");
-                        break;
-                }   
+                output (pack[j][temp]);
+                  
                 if (j < 14) {
                     printf("、");
                 } else {
@@ -125,9 +59,7 @@ int main(void)
         }
 
         printf("\n");
-        printf("ネタを選んで下さい。(数字で入力してください。)\n");
-        printf("==> ");
-        scanf("%d", &scan);
+        scan = input();
 
         do {                                                    //エラーチェック
             scan -= 1;
@@ -135,16 +67,12 @@ int main(void)
             if (scan > 14 || scan < 0) {
                 printf("エラー 0 ~ 15 の間で入力して下さい。\n");
                 printf("\n");
-                printf("ネタを選んで下さい。(数字で入力してください。)\n");
-                printf("==> ");
-                scanf("%d", &scan);
+                scan = input();
                 flag = 1;
             } else if (pack[scan][temp] == -1){
                 printf("エラー 選んだネタはすでにpickされています。\n");
                 printf("\n");
-                printf("ネタを選んで下さい。(数字で入力してください。)\n");
-                printf("==> ");
-                scanf("%d", &scan);
+                scan = input();
                 flag = 1;
             }
         } while (flag == 1);
@@ -180,83 +108,96 @@ int main(void)
 
     printf("あなたがpickしたネタは…\n");
     for (i = 0; i < 15; i++){
-        printf("%d ",i + 1);
-        switch (Mypack[i]) {
-                    case 0:
-                        printf("大トロ");
-                        break;
-                    case 1:
-                        printf("ウニ&いくら");
-                        break;
-                    case 2:
-                        printf("赤エビ");
-                        break;
-                    case 3:
-                        printf("煮穴子");
-                        break;
-                    case 4:
-                        printf("中とろ");
-                        break;
-                    case 5:
-                        printf("寒ブリ");
-                        break;
-                    case 6:
-                        printf("甘鯛");
-                        break;
-                    case 7:
-                        printf("アジ");
-                        break;
-                    case 8:
-                        printf("マグロ");
-                        break;
-                    case 9:
-                        printf("サーモン");
-                        break;
-                    case 10:
-                        printf("いか");
-                        break;
-                    case 11:
-                        printf("タコ");
-                        break;
-                    case 12:
-                        printf("エビ");
-                        break;
-                    case 13:
-                        printf("ホタテ");
-                        break;
-                    case 14:
-                        printf("かっぱ巻き");
-                        break;
-                    case 15:
-                        printf("かんぴょう巻き");
-                        break;
-                    case 16:
-                        printf("いなり");
-                        break;
-                    case 17:
-                        printf("玉子焼き");
-                        break;
-                    case 18:
-                        printf("ナス");
-                        break;
-                    case 19:
-                        printf("納豆巻き");
-                        break;
-                    case 20:
-                        printf("新香巻き");
-                        break;
-                    case 21:
-                        printf("ハンバーグ");
-                        break;
-                    case 22:
-                        printf("コーン");
-                        break;
-                }   
-                if (j < 14) {
-                    printf("、");
-                } else {
-                    printf("\n");
-                }
+        printf("%2d pick目 ",i + 1);
+        output (Mypack[i]);
+        printf("\n");
     }
     return 0;
+}
+
+int input (void)
+{
+    int scan;
+
+    printf("ネタを選んで下さい。(数字で入力してください。)\n");
+    printf("==> ");
+    scanf("%d", &scan);
+
+    return scan;
+}
+
+void output (pack)
+{
+    switch (pack){
+        case 0:
+            printf("大トロ");
+            break;
+        case 1:
+            printf("ウニ&いくら");
+            break;
+        case 2:
+            printf("赤エビ");
+            break;
+        case 3:
+            printf("煮穴子");
+            break;
+        case 4:
+            printf("中とろ");
+            break;
+        case 5:
+            printf("寒ブリ");
+            break;
+        case 6:
+            printf("甘鯛");
+            break;
+        case 7:
+            printf("アジ");
+            break;
+        case 8:
+            printf("マグロ");
+            break;
+        case 9:
+            printf("サーモン");
+            break;
+        case 10:
+            printf("いか");
+            break;
+        case 11:
+            printf("タコ");
+            break;
+        case 12:
+            printf("エビ");
+            break;
+        case 13:
+            printf("ホタテ");
+            break;
+        case 14:
+            printf("かっぱ巻き");
+            break;
+        case 15:
+            printf("かんぴょう巻き");
+            break;
+        case 16:
+            printf("いなり");
+            break;
+        case 17:
+            printf("玉子焼き");
+            break;
+        case 18:
+            printf("ナス");
+            break;
+        case 19:
+            printf("納豆巻き");
+            break;
+        case 20:
+            printf("新香巻き");
+            break;
+        case 21:
+            printf("ハンバーグ");
+            break;
+        case 22:
+            printf("コーン");
+            break;
+    }
+                   
 }
